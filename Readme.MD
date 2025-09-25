@@ -17,4 +17,6 @@ https://youtube.com/shorts/yOgWd6F6p34?feature=share
 ![Screenshot](/PICTURES/07_F407ZG_OLD_BOTTOM.jpg)
 ![Screenshot](/PICTURES/08_STM32_F4ZG_Pro_1712M_SCHEME.GIF)
 ![Screenshot](/PICTURES/09_STM32F407ZGT6_schematics.gif)
- 
+![Screenshot](/PICTURES/10_CUBE.jpg)
+![Screenshot](/PICTURES/11_CUBE.jpg)
+![Screenshot](/PICTURES/12_CUBE.jpg) 
