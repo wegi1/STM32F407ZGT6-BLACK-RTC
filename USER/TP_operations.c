@@ -11,7 +11,7 @@
 #include "XPT2046_touch.h"
 #include "GUI.h"
 extern SPI_HandleTypeDef hspi2;
-
+extern void make_fade(void);
 //==========================================
 // Domyślnie są to dane touchtype=0.
 u8 CMD_RDX=0XD0;
@@ -204,8 +204,8 @@ void live_show_ts(void)
 		my_utoa(&idy[0], RAW_DATA.y);
 
 
-		LCD_OpenWin(20, 20, 75, 80);
-		for(uint32_t ix = 0; ix < 3300 ; ix++) { LCD_RAM = 0 ;}
+		LCD_OpenWin(20, 20, 115, 80);
+		for(uint32_t ix = 0; ix < 5700 ; ix++) { LCD_RAM = 0 ;}
 
         lcd_mono_text_boxed(20, 20, (char*)&idx[0], digital_7_ttf, 20);
 		lcd_mono_text_boxed(20, 50, (char*)&idy[0], digital_7_ttf, 20);
@@ -226,8 +226,8 @@ void live_show_ts(void)
 		my_utoa(&idx[0], COORDS.x);
 		my_utoa(&idy[0], COORDS.y);
 
-		LCD_OpenWin(120, 20, 175, 80);
-		for(uint32_t ix = 0; ix < 3300 ; ix++) { LCD_RAM = 0 ;}
+		LCD_OpenWin(120, 20, 215, 80);
+		for(uint32_t ix = 0; ix < 5700 ; ix++) { LCD_RAM = 0 ;}
 
         lcd_mono_text_boxed(120, 20, (char*)&idx[0], digital_7_ttf, 20);
 		lcd_mono_text_boxed(120, 50, (char*)&idy[0], digital_7_ttf, 20);
@@ -236,7 +236,8 @@ void live_show_ts(void)
 			if(COORDS.x > 240) {
 				while(XPT2046_TouchPressed() == true ){;} // wait for releasse TS
 				HAL_Delay(250);
-				LCD_ClrScr(COLOR_565_MAGENTA);
+				LCD_ClrScr(0);
+				make_fade();
 				return;
 			}
 		}
