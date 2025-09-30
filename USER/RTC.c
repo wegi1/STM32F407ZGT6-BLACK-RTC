@@ -40,18 +40,13 @@ extern char tekst[30];
 extern void lcd_setup_picture(uint8_t pic_nr);
 extern uint32_t readPicFromFlash(uint8_t pic_nr);
 
-#define digital_7_ttf     0
-#define dum1_ttf          1
-#define lcd_mono_text_boxed       lcd_mono_t_box
-#define lcd_text_boxed            lcd_t_box
-
-extern int lcd_mono_t_box(int pozx, int pozy, const char *text, int data_font, float pixel_height);
-extern int lcd_t_box(int pozx, int pozy, const char *text, int data_font, float pixel_height);
-
-//extern int lcd_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
-//extern int lcd_mono_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
 
 
+extern const unsigned char digital_7_ttf[] ;
+extern const unsigned char dum1_ttf[];
+
+extern int lcd_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
+extern int lcd_mono_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
 
 
 
