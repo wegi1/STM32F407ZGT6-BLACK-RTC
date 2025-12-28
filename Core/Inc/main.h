@@ -55,24 +55,30 @@ void HAL_TIM_MspPostInit(TIM_HandleTypeDef *htim);
 void Error_Handler(void);
 
 /* USER CODE BEGIN EFP */
+extern uint8_t idx[];
+extern uint8_t idy[];
 extern uint32_t my_utoa(uint8_t * buf, uint32_t data);
 extern uint32_t my_itoa(uint8_t * buf, uint32_t data);
 extern void my_htoa32(uint8_t * buf, uint32_t data);
 /* USER CODE END EFP */
 
 /* Private defines -----------------------------------------------------------*/
-#define T_CS_Pin GPIO_PIN_13
-#define T_CS_GPIO_Port GPIOC
-#define T_CLK_Pin GPIO_PIN_0
-#define T_CLK_GPIO_Port GPIOB
-#define T_PEN_Pin GPIO_PIN_1
-#define T_PEN_GPIO_Port GPIOB
-#define T_MISO_Pin GPIO_PIN_2
-#define T_MISO_GPIO_Port GPIOB
-#define T_MOSI_Pin GPIO_PIN_11
-#define T_MOSI_GPIO_Port GPIOF
+#define BTN2_Pin GPIO_PIN_4
+#define BTN2_GPIO_Port GPIOE
+#define LCDTP_CS_Pin GPIO_PIN_13
+#define LCDTP_CS_GPIO_Port GPIOC
+#define LCDTP_CLK_Pin GPIO_PIN_0
+#define LCDTP_CLK_GPIO_Port GPIOB
+#define LCDTP_IRQ_Pin GPIO_PIN_1
+#define LCDTP_IRQ_GPIO_Port GPIOB
+#define LCDTP_DOUT_Pin GPIO_PIN_2
+#define LCDTP_DOUT_GPIO_Port GPIOB
+#define LCDTP_DIN_Pin GPIO_PIN_11
+#define LCDTP_DIN_GPIO_Port GPIOF
 #define FLASH_CS_Pin GPIO_PIN_14
 #define FLASH_CS_GPIO_Port GPIOB
+#define BTN0_Pin GPIO_PIN_8
+#define BTN0_GPIO_Port GPIOB
 
 /* USER CODE BEGIN Private defines */
 

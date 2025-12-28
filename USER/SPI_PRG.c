@@ -15,13 +15,13 @@
 //=========================================================
 //=========================================================
 //=========================================================
-#define T_DATA_IN HAL_GPIO_ReadPin(T_MISO_GPIO_Port, T_MISO_Pin)
+#define T_DATA_IN HAL_GPIO_ReadPin(LCDTP_DOUT_GPIO_Port, LCDTP_DOUT_Pin)
 
-#define T_DO_HI HAL_GPIO_WritePin(T_MOSI_GPIO_Port, T_MOSI_Pin, SET)
-#define T_DO_LO HAL_GPIO_WritePin(T_MOSI_GPIO_Port, T_MOSI_Pin, RESET)
+#define T_DO_HI HAL_GPIO_WritePin(LCDTP_DIN_GPIO_Port, LCDTP_DIN_Pin, SET)
+#define T_DO_LO HAL_GPIO_WritePin(LCDTP_DIN_GPIO_Port, LCDTP_DIN_Pin, RESET)
 
-#define T_CLK_HI HAL_GPIO_WritePin(T_CLK_GPIO_Port, T_CLK_Pin, SET)
-#define T_CLK_LO HAL_GPIO_WritePin(T_CLK_GPIO_Port, T_CLK_Pin, RESET)
+#define T_CLK_HI HAL_GPIO_WritePin(LCDTP_CLK_GPIO_Port, LCDTP_CLK_Pin, SET)
+#define T_CLK_LO HAL_GPIO_WritePin(LCDTP_CLK_GPIO_Port, LCDTP_CLK_Pin, RESET)
 
 #define T_CS_HI HAL_GPIO_WritePin(T_CS_GPIO_Port, T_CS_Pin, SET)
 #define T_CS_LO HAL_GPIO_WritePin(T_CS_GPIO_Port, T_CS_Pin, RESET)

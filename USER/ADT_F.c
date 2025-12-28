@@ -421,7 +421,7 @@ uint8_t test_stop(void) {
 uint8_t result = 0;
 
 //	if((KEY1_GPIO_Port->IDR & KEY1_Pin) == 0){ result = 1 ;} // key1 pressed?
-	if((T_PEN_GPIO_Port->IDR & T_PEN_Pin) == 0){ result = 1 ;} // screen pressed ?
+	if((LCDTP_IRQ_GPIO_Port->IDR & LCDTP_IRQ_Pin) == 0){ result = 1 ;} // screen pressed ?
 	if(result != 0){ HAL_Delay(20) ;}
 	return result;
 }

@@ -12,8 +12,7 @@
 #include "demos.h"
 #include "ili9341.h"
 
-#include "TP_operations.h"
-#include "XPT2046_touch.h"
+#include "touch_panel.h"
 #include "stdio.h"
 //#include "fonty.h"
 //#include "dum.h"
@@ -28,7 +27,7 @@ extern uint8_t idy[13];
 extern lcdPropertiesTypeDef  lcdProperties;
 extern uint16_t lcd_text_color ;
 extern uint16_t lcd_background_color;
-extern uint16_t Paint_Color;
+
 
 extern SPI_HandleTypeDef hspi1;
 extern SPI_HandleTypeDef hspi2;
@@ -95,7 +94,7 @@ extern uint8_t LCD_PORTRAIT_NOT_WORK_ORIENTATION ;
 
 extern void main_app(void);
 extern void do_calibrate(void);
-extern void start_Paint(void);
+extern void paint_proc(void);
 extern MATRIX  matrix ;
 extern void TIM4_IRQHandler(void);
 //=====================================================================================================================
@@ -161,6 +160,7 @@ void READ_CENTURY(void);
 
 
 bool go_to_back(void);
+bool XPT2046_TouchPressed(void);
 
 //=====================================================================================================================
 //=====================================================================================================================
@@ -887,13 +887,16 @@ void SLIDE_SHOW(void) {
 //=====================================================================================================================
 void CAL_TS(void) {
 	if(test_pressed_point(0, 159, 45, 95) == true)  {
+		uint8_t bckp = lcdProperties.orientation;
 		wait_for_releasseTS(); // wait for releasse TS
 		LCD_ClrScr(lcd_background_color);
 		__HAL_TIM_SET_COMPARE(&htim12, TIM_CHANNEL_2, 65535);
-		lets_calibrate_ts(LCD_ORIENTATION_LANDSCAPE_ROTATE);
+		TouchPanel_Calibrate();
 		LCD_ClrScr(lcd_background_color);
-		Paint_Color = COLOR_565_WHITE;
-		start_Paint();
+
+		paint_proc();
+
+		lcdSetOrientation(bckp);
 
 		set_PWM();
 		wait_for_releasseTS(); // wait for releasse TS
@@ -1199,11 +1202,11 @@ void set_night_PWM(void) {
 }
 //=====================================================================================================================
 void TTF_test(void) {
-	extern uint16_t Paint_Color;
+
 	extern void Big_TTF_Demo(void);
 
 	if(test_pressed_point(159, 319, 45, 95) == true)  {
-		Paint_Color = COLOR_565_WHITE;
+
 		Big_TTF_Demo();
 		wait_for_releasseTS(); // wait for releasse TS
 		Pressed_Point.x =0;
@@ -1215,8 +1218,8 @@ void TTF_test(void) {
 //=====================================================================================================================
 void paint_test(void) {
 	if(test_pressed_point(0, 159, 45, 95) == true)  {
-		Paint_Color = COLOR_565_WHITE;
-		start_Paint();
+
+		paint_proc();
 		wait_for_releasseTS(); // wait for releasse TS
 		Pressed_Point.x =0;
 		Pressed_Point.y =0;
@@ -1328,18 +1331,25 @@ bool set_year(void) {
 }
 //=====================================================================================================================
 void get_pressed_point(void){
-	POINT OneSample;
-	while(XPT2046_TouchPressed() != true);
-	while((XPT2046_GetFastCoordinates(&OneSample.x, &OneSample.y)) != true ){ ; }
-	getDisplayPoint( &Pressed_Point, &OneSample, &matrix ) ;
-	if(LCD_WORK_ORIENTATION == LCD_ORIENTATION_LANDSCAPE) {
+
+	POINT * Ptr;
+	while(XPT2046_TouchPressed() != true){ __asm volatile("":::"memory");}
+
+	HAL_Delay(5);
+	Pressed_Point.x =2222;
+	Pressed_Point.y =2222;
+	do
+	{
+		Ptr=Read_Ads7846();
+	}
+	while( Ptr == (void*)0 );
+
+	getDisplayPoint(&Pressed_Point, Ptr, &matrix );
+
+	if(LCD_WORK_ORIENTATION == LCD_ORIENTATION_LANDSCAPE_ROTATE ) {
 		Pressed_Point.x = 319 - Pressed_Point.x;
 		Pressed_Point.y = 239 - Pressed_Point.y;
 	}
-	my_utoa(&idx[0], Pressed_Point.x);
-	my_utoa(&idy[0], Pressed_Point.y);
-	wait_for_releasseTS(); // wait for releasse TS
-	HAL_Delay(20);
 }
 //=====================================================================================================================
 void test_setup(void)
@@ -1513,9 +1523,19 @@ bool test_pressed_point(uint16_t xmin, uint16_t xmax, uint16_t ymin, uint16_t ym
 	return false;
 }
 //=====================================================================================================================
-
-
-
+bool XPT2046_TouchPressed(void) {
+	return HAL_GPIO_ReadPin(LCDTP_IRQ_GPIO_Port, LCDTP_IRQ_Pin) == GPIO_PIN_RESET;
+}
 //=====================================================================================================================
 //=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+//=====================================================================================================================
+
+
 

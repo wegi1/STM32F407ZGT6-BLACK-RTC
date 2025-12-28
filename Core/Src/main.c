@@ -24,12 +24,12 @@
 
 #include "time.h"
 #include "ili9341.h"
-#include "calibrate.h"
+
 
 #include "demos.h"
 #include "ADT_F.h"
 #include "RTC.h"
-#include "TP_operations.h"
+#include "touch_panel.h"
 
 /* USER CODE END Includes */
 
@@ -68,7 +68,7 @@ uint8_t idy[13];
 extern lcdPropertiesTypeDef  lcdProperties;
 extern uint16_t lcd_text_color ;
 extern uint16_t lcd_background_color;
-extern uint16_t Paint_Color;
+
 
 extern uint8_t LCD_WORK_ORIENTATION ;
 extern uint8_t LCD_NOT_WORK_ORIENTATION ;
@@ -399,7 +399,7 @@ static void MX_TIM6_Init(void)
 
   /* USER CODE END TIM6_Init 1 */
   htim6.Instance = TIM6;
-  htim6.Init.Prescaler = 8400-1;
+  htim6.Init.Prescaler = 84-1;
   htim6.Init.CounterMode = TIM_COUNTERMODE_UP;
   htim6.Init.Period = 65535;
   htim6.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
@@ -484,49 +484,55 @@ static void MX_GPIO_Init(void)
   /* USER CODE END MX_GPIO_Init_1 */
 
   /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOC_CLK_ENABLE();
   __HAL_RCC_GPIOH_CLK_ENABLE();
   __HAL_RCC_GPIOB_CLK_ENABLE();
   __HAL_RCC_GPIOF_CLK_ENABLE();
-  __HAL_RCC_GPIOE_CLK_ENABLE();
   __HAL_RCC_GPIOD_CLK_ENABLE();
   __HAL_RCC_GPIOG_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(T_CS_GPIO_Port, T_CS_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LCDTP_CS_GPIO_Port, LCDTP_CS_Pin, GPIO_PIN_SET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOB, T_CLK_Pin|FLASH_CS_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOB, LCDTP_CLK_Pin|FLASH_CS_Pin, GPIO_PIN_RESET);
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(T_MOSI_GPIO_Port, T_MOSI_Pin, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(LCDTP_DIN_GPIO_Port, LCDTP_DIN_Pin, GPIO_PIN_SET);
 
-  /*Configure GPIO pin : T_CS_Pin */
-  GPIO_InitStruct.Pin = T_CS_Pin;
+  /*Configure GPIO pin : BTN2_Pin */
+  GPIO_InitStruct.Pin = BTN2_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BTN2_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : LCDTP_CS_Pin */
+  GPIO_InitStruct.Pin = LCDTP_CS_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
-  HAL_GPIO_Init(T_CS_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LCDTP_CS_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : T_CLK_Pin */
-  GPIO_InitStruct.Pin = T_CLK_Pin;
+  /*Configure GPIO pin : LCDTP_CLK_Pin */
+  GPIO_InitStruct.Pin = LCDTP_CLK_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(T_CLK_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LCDTP_CLK_GPIO_Port, &GPIO_InitStruct);
 
-  /*Configure GPIO pins : T_PEN_Pin T_MISO_Pin */
-  GPIO_InitStruct.Pin = T_PEN_Pin|T_MISO_Pin;
+  /*Configure GPIO pins : LCDTP_IRQ_Pin LCDTP_DOUT_Pin */
+  GPIO_InitStruct.Pin = LCDTP_IRQ_Pin|LCDTP_DOUT_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
 
-  /*Configure GPIO pin : T_MOSI_Pin */
-  GPIO_InitStruct.Pin = T_MOSI_Pin;
+  /*Configure GPIO pin : LCDTP_DIN_Pin */
+  GPIO_InitStruct.Pin = LCDTP_DIN_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_VERY_HIGH;
-  HAL_GPIO_Init(T_MOSI_GPIO_Port, &GPIO_InitStruct);
+  HAL_GPIO_Init(LCDTP_DIN_GPIO_Port, &GPIO_InitStruct);
 
   /*Configure GPIO pin : FLASH_CS_Pin */
   GPIO_InitStruct.Pin = FLASH_CS_Pin;
@@ -534,6 +540,12 @@ static void MX_GPIO_Init(void)
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
   HAL_GPIO_Init(FLASH_CS_GPIO_Port, &GPIO_InitStruct);
+
+  /*Configure GPIO pin : BTN0_Pin */
+  GPIO_InitStruct.Pin = BTN0_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_PULLUP;
+  HAL_GPIO_Init(BTN0_GPIO_Port, &GPIO_InitStruct);
 
   /* USER CODE BEGIN MX_GPIO_Init_2 */
 
