@@ -18,6 +18,7 @@
 #include "stm32f4xx.h"
 #include "main.h"
 #include "ili9341.h"
+#include "ADT_F.h"
 /* Private variables ---------------------------------------------------------*/
 //Matrix matrix ;
 MATRIX  matrix = {
@@ -550,11 +551,6 @@ static void show_Matrix(void) {
 //===================================================================================
 void live_show_ts(void)
 {
-
-	extern const unsigned char digital_7_ttf[];
-	extern int lcd_mono_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
-	extern int lcd_text_boxed(int pozx, int pozy, const char *text, const unsigned char *font_data, float pixel_height);
-
 
 	POINT   COORDS ;
 	POINT * RAW_DATA ;

@@ -280,7 +280,7 @@ void print_RTC(void) {
 	lcd_mono_text_boxed(0, 125, tekst, digital_7_ttf, 40);
 
 
-	LCD_DisARectangular(200, 125, 319, 185, lcd_background_color); // clear for short name
+	LCD_DisARectangular(200, 123, 319, 188, lcd_background_color); // clear for short name
 	lcd_text_boxed(88, 140, getDayofweek(my_date.WeekDay), dum1_ttf, 42);
 
 	hh = my_date.Year + ((century - 1) * 100);
@@ -1002,6 +1002,7 @@ void TIM_CALIBRATE_SETUP(void) {
 uint8_t calibr_action(void) {
 	while(1) {
 		get_pressed_point();
+		HAL_Delay(200);
 		// DONE test
 		if((test_pressed_point(80, 240, 115, 165)) == true) { return 5;} // DONE
 
@@ -1503,6 +1504,7 @@ void put_DATE_number(void){
 uint8_t test_action(void) {
 	while(1) {
 		get_pressed_point();
+		HAL_Delay(100);
 		// DONE test
 		if((test_pressed_point(80, 240, 172, 230)) == true) { return 3;}
 		if((test_pressed_point(235, 318, 55, 165)) == true) { return 2;}
